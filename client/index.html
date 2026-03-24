@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" style="background: hsl(230, 25%, 12%);">
+  <head>
+    <script>
+      (function() {
+        var lang = localStorage.getItem('preferredLanguage') || 'en';
+        document.documentElement.lang = lang;
+        var loadingTexts = {
+          en: 'Loading...', tr: 'Yükleniyor...', zh: '加载中...', hi: 'लोड हो रहा है...',
+          es: 'Cargando...', fr: 'Chargement...', ar: 'جار التحميل...', ru: 'Загрузка...'
+        };
+        window.__splashLoadingText = loadingTexts[lang] || 'Loading...';
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
+    <meta name="theme-color" content="#1a1d2e" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="IdleThrone" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="application-name" content="IdleThrone" />
+    <meta name="msapplication-TileColor" content="#1a1d2e" />
+
+    <meta property="og:title" content="IdleThrone - Idle RPG" />
+    <meta property="og:description" content="Train your skills, gather resources, and become a legendary hero!" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@replit" />
+    <meta name="twitter:title" content="IdleThrone - Idle RPG" />
+    <meta name="twitter:description" content="Train your skills, gather resources, and become a legendary hero!" />
+
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/icon-192.png" />
+    
+    <!-- iOS Launch Images -->
+    <link rel="apple-touch-startup-image" href="/splash/iphone-14-pro-max.png" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3)" />
+    <link rel="apple-touch-startup-image" href="/splash/iphone-14-pro.png" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3)" />
+    <link rel="apple-touch-startup-image" href="/splash/iphone-13-pro-max.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3)" />
+    <link rel="apple-touch-startup-image" href="/splash/iphone-13.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)" />
+    <link rel="apple-touch-startup-image" href="/splash/iphone-x.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" />
+    <link rel="apple-touch-startup-image" href="/splash/iphone-xs-max.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)" />
+    <link rel="apple-touch-startup-image" href="/splash/iphone-xr.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)" />
+    <link rel="apple-touch-startup-image" href="/splash/iphone-12-mini.png" media="(device-width: 360px) and (device-height: 780px) and (-webkit-device-pixel-ratio: 3)" />
+    <link rel="apple-touch-startup-image" href="/splash/iphone-8.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" />
+    <link rel="apple-touch-startup-image" href="/splash/iphone-8-plus.png" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)" />
+    <link rel="apple-touch-startup-image" href="/splash/iphone-se.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+      #splash-screen {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: hsl(230, 25%, 12%);
+        opacity: 1;
+        transition: opacity 0.3s ease-out;
+      }
+      #splash-screen.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body style="margin: 0; padding: 0; background: hsl(230, 25%, 12%); min-height: 100vh;">
+    <div id="root" style="background: hsl(230, 25%, 12%); min-height: 100vh;">
+      <!-- Fallback loading - React will replace this when it mounts -->
+      <div id="react-loading" style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+        <div id="react-loading-text" style="color: hsl(220, 15%, 60%); font-size: 14px; font-family: system-ui, sans-serif;">Loading...</div>
+      </div>
+      <script>
+        var el = document.getElementById('react-loading-text');
+        if (el && window.__splashLoadingText) el.textContent = window.__splashLoadingText;
+      </script>
+    </div>
+    <div id="splash-screen">
+      <img src="/icon-512.png" alt="IdleThrone" style="width: 128px; height: 128px;" />
+    </div>
+    <script>
+      performance.mark('html-parsed');
+      // Force hide splash after 2 seconds - runs immediately, before JS bundle loads
+      setTimeout(function() {
+        var splash = document.getElementById('splash-screen');
+        if (splash && !splash.classList.contains('hidden')) {
+          console.warn('[Splash] Force hiding after 2s timeout (HTML)');
+          splash.classList.add('hidden');
+          setTimeout(function() { splash.remove(); }, 300);
+        }
+      }, 2000);
+    </script>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Only register SW in production to avoid caching issues during development
+      if ('serviceWorker' in navigator && window.location.hostname !== 'localhost' && !window.location.hostname.includes('.replit.dev')) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/sw.js')
+            .then(function(reg) { console.log('SW registered:', reg.scope); })
+            .catch(function(err) { console.log('SW registration failed:', err); });
+        });
+      } else if ('serviceWorker' in navigator) {
+        // Unregister any existing SW in development
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+          for (var registration of registrations) {
+            registration.unregister().then(function() {
+              console.log('SW unregistered for development');
+            });
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

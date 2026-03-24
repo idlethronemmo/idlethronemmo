@@ -1,0 +1,15 @@
+node_modules/
+dist/
+build/
+.DS_Store
+server/public
+vite.config.ts.*
+*.tar.gz
+.canvas/
+attached_assets/
+.env
+.env.*
+*.log
+*.mp3
+*.wav
+*.zip

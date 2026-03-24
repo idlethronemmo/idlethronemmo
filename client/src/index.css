@@ -1,0 +1,574 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+  
+  --color-sidebar: hsl(var(--sidebar));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+
+  --font-display: 'Rubik', sans-serif;
+  --font-ui: 'Rubik', sans-serif;
+  --font-sans: 'Rubik', sans-serif;
+}
+
+/* IdleMMO Inspired Dark Theme */
+:root {
+  /* Deep blue/purple gradient base */
+  --background: 230 25% 12%;
+  --foreground: 210 40% 96%;
+
+  --card: 230 25% 16%;
+  --card-foreground: 210 40% 96%;
+
+  --popover: 230 25% 18%;
+  --popover-foreground: 210 40% 96%;
+
+  /* Teal/Cyan Primary */
+  --primary: 175 70% 50%;
+  --primary-foreground: 230 25% 10%;
+
+  /* Purple secondary */
+  --secondary: 260 30% 25%;
+  --secondary-foreground: 260 20% 90%;
+
+  --muted: 230 20% 20%;
+  --muted-foreground: 220 15% 60%;
+
+  --accent: 280 40% 25%;
+  --accent-foreground: 280 30% 90%;
+
+  --destructive: 0 65% 50%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 230 20% 22%;
+  --input: 230 20% 20%;
+  --ring: 175 70% 50%;
+
+  --radius: 0.625rem;
+
+  --sidebar: 230 30% 10%;
+  --sidebar-foreground: 210 30% 90%;
+  --sidebar-primary: 175 70% 50%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 260 30% 22%;
+  --sidebar-accent-foreground: 260 20% 90%;
+  --sidebar-border: 230 20% 18%;
+  --sidebar-ring: 175 70% 50%;
+
+  /* Colorful RPG Colors */
+  --chart-1: 145 60% 45%; /* Green */
+  --chart-2: 0 70% 55%; /* Red */
+  --chart-3: 200 80% 55%; /* Blue */
+  --chart-4: 45 90% 55%; /* Gold */
+  --chart-5: 280 60% 55%; /* Purple */
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    background-image: 
+      linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+    background-size: 50px 50px;
+    background-position: -1px -1px;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display tracking-tight;
+  }
+}
+
+.grid-bg {
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+.card-glow {
+  box-shadow: 0 0 20px rgba(45, 212, 191, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.icon-glow {
+  filter: drop-shadow(0 0 6px currentColor);
+}
+
+.text-glow {
+  text-shadow: 0 0 10px currentColor;
+}
+
+@keyframes progress {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.animate-progress {
+  animation: progress linear forwards;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: translateY(-20px) scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-40px) scale(0.9);
+  }
+}
+
+/* Monster Attack Animation - lunges forward */
+@keyframes monsterAttack {
+  0% {
+    transform: translateX(0) scale(1);
+  }
+  15% {
+    transform: translateX(-8px) scale(1.05);
+  }
+  30% {
+    transform: translateX(20px) scale(1.1);
+  }
+  50% {
+    transform: translateX(25px) scale(1.1);
+  }
+  100% {
+    transform: translateX(0) scale(1);
+  }
+}
+
+/* Monster Taking Damage Animation - shake and flash red */
+@keyframes monsterHit {
+  0% {
+    transform: translateX(0);
+    filter: brightness(1);
+  }
+  10% {
+    transform: translateX(-6px);
+    filter: brightness(1.5) saturate(0.5) sepia(1) hue-rotate(-50deg);
+  }
+  20% {
+    transform: translateX(6px);
+    filter: brightness(1.3) saturate(0.7) sepia(0.8) hue-rotate(-50deg);
+  }
+  30% {
+    transform: translateX(-4px);
+    filter: brightness(1.2);
+  }
+  40% {
+    transform: translateX(4px);
+    filter: brightness(1.1);
+  }
+  50% {
+    transform: translateX(-2px);
+    filter: brightness(1);
+  }
+  100% {
+    transform: translateX(0);
+    filter: brightness(1);
+  }
+}
+
+/* Monster Death Animation - shrink, spin, fade out */
+@keyframes monsterDeath {
+  0% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+    filter: brightness(1);
+  }
+  20% {
+    transform: scale(1.1) rotate(-5deg);
+    filter: brightness(1.5) saturate(0.3);
+  }
+  40% {
+    transform: scale(0.8) rotate(10deg);
+    opacity: 0.8;
+    filter: brightness(0.8) grayscale(0.5);
+  }
+  60% {
+    transform: scale(0.5) rotate(-15deg);
+    opacity: 0.5;
+    filter: brightness(0.5) grayscale(0.8);
+  }
+  80% {
+    transform: scale(0.2) rotate(25deg);
+    opacity: 0.2;
+    filter: brightness(0.3) grayscale(1);
+  }
+  100% {
+    transform: scale(0) rotate(45deg);
+    opacity: 0;
+    filter: brightness(0) grayscale(1);
+  }
+}
+
+/* Monster Spawn Animation - fast fade in with bounce */
+@keyframes monsterSpawn {
+  0% {
+    transform: scale(0.3) translateY(10px);
+    opacity: 0;
+    filter: brightness(1.5) blur(2px);
+  }
+  40% {
+    transform: scale(1.1) translateY(-3px);
+    opacity: 0.85;
+    filter: brightness(1.2) blur(0);
+  }
+  70% {
+    transform: scale(0.97) translateY(1px);
+    opacity: 1;
+    filter: brightness(1.05);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+    filter: brightness(1);
+  }
+}
+
+/* Animation utility classes */
+.monster-attacking {
+  animation: monsterAttack 0.4s ease-out forwards;
+}
+
+.monster-hit {
+  animation: monsterHit 0.3s ease-out forwards;
+}
+
+.monster-dying {
+  animation: monsterDeath 0.6s ease-out forwards;
+}
+
+.monster-spawning {
+  animation: monsterSpawn 0.3s ease-out forwards;
+}
+
+/* Pixelated image rendering for sharp pixel art at small sizes */
+.pixelated {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+/* Hide all scrollbars globally while keeping scroll functionality */
+*:not(.loot-scroll-container):not(.food-scroll-container):not(.potion-scroll-container),
+*:not(.loot-scroll-container):not(.food-scroll-container):not(.potion-scroll-container)::before,
+*:not(.loot-scroll-container):not(.food-scroll-container):not(.potion-scroll-container)::after {
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; /* IE/Edge */
+}
+
+*:not(.loot-scroll-container):not(.food-scroll-container):not(.potion-scroll-container)::-webkit-scrollbar {
+  display: none !important; /* Chrome, Safari, Opera */
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+.loot-scroll-container {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(245, 158, 11, 0.4) transparent;
+  -webkit-overflow-scrolling: touch;
+}
+
+.loot-scroll-container::-webkit-scrollbar {
+  display: block !important;
+  height: 4px !important;
+}
+
+.loot-scroll-container::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+.loot-scroll-container::-webkit-scrollbar-thumb {
+  background: rgba(245, 158, 11, 0.4) !important;
+  border-radius: 4px !important;
+}
+
+.food-scroll-container {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(245, 158, 11, 0.4) transparent;
+  -webkit-overflow-scrolling: touch;
+}
+
+.food-scroll-container::-webkit-scrollbar {
+  display: block !important;
+  height: 4px !important;
+}
+
+.food-scroll-container::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+.food-scroll-container::-webkit-scrollbar-thumb {
+  background: rgba(245, 158, 11, 0.4) !important;
+  border-radius: 4px !important;
+}
+
+.potion-scroll-container {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(168, 85, 247, 0.4) transparent;
+  -webkit-overflow-scrolling: touch;
+}
+
+.potion-scroll-container::-webkit-scrollbar {
+  display: block !important;
+  height: 4px !important;
+}
+
+.potion-scroll-container::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+.potion-scroll-container::-webkit-scrollbar-thumb {
+  background: rgba(168, 85, 247, 0.4) !important;
+  border-radius: 4px !important;
+}
+
+/* Allow dialog content to overflow for floating images - desktop only */
+@media (min-width: 768px) {
+  [data-radix-dialog-content] {
+    overflow: visible !important;
+  }
+
+  /* Ensure dialog portal doesn't clip content - desktop only */
+  [data-radix-portal] {
+    overflow: visible !important;
+  }
+}
+
+/* Mobile safe area utilities */
+.safe-area-top {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.safe-area-left {
+  padding-left: env(safe-area-inset-left, 0px);
+}
+
+.safe-area-right {
+  padding-right: env(safe-area-inset-right, 0px);
+}
+
+/* Mobile-specific: Enable proper scrolling in fixed modals */
+@media (max-width: 767px) {
+  .mobile-modal-scroll {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+}
+
+/* Mobile bottom nav - ensure it stays fixed regardless of parent transforms */
+[data-testid="mobile-bottom-nav"] {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 9999 !important;
+  isolation: isolate;
+  transform: translate3d(0, 0, 0) !important;
+  -webkit-transform: translate3d(0, 0, 0) !important;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: transform;
+  touch-action: none;
+}
+
+/* Reinforce bottom nav position when body styles change (dialogs, chat overlay) */
+body[style*="overflow: hidden"] [data-testid="mobile-bottom-nav"],
+body[style*="overflow:hidden"] [data-testid="mobile-bottom-nav"],
+body[style*="pointer-events"] [data-testid="mobile-bottom-nav"] {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 9999 !important;
+  transform: translate3d(0, 0, 0) !important;
+  -webkit-transform: translate3d(0, 0, 0) !important;
+}
+
+/* More menu overlay and popup - ensure proper stacking */
+[data-testid="more-menu-overlay"],
+[data-testid="more-menu-popup"] {
+  position: fixed !important;
+  isolation: isolate;
+}
+
+/* Minimum size for desktop/tablet (screens wider than 768px) */
+@media (min-width: 768px) {
+  html {
+    min-width: 1024px;
+    min-height: 600px;
+  }
+  
+  body {
+    min-width: 1024px;
+    min-height: 600px;
+  }
+}
+
+/* Force landscape orientation message for tablets in portrait mode */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: hsl(230 25% 12%);
+    z-index: 99999;
+  }
+  
+  body::after {
+    content: "↻";
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(90deg);
+    font-size: 80px;
+    color: hsl(175 70% 50%);
+    z-index: 100000;
+    animation: rotateHint 2s ease-in-out infinite;
+  }
+  
+  @keyframes rotateHint {
+    0%, 100% { transform: translate(-50%, -50%) rotate(90deg); }
+    50% { transform: translate(-50%, -50%) rotate(0deg); }
+  }
+}
+
+@keyframes enhancement-pulse {
+  0% { opacity: 0.3; transform: translate(-50%, -50%) scale(0.8); }
+  50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.2); }
+  100% { opacity: 0.3; transform: translate(-50%, -50%) scale(0.8); }
+}
+
+@keyframes enhancement-ring {
+  0% { opacity: 0.5; transform: translate(-50%, -50%) scale(0.6) rotate(0deg); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.5) rotate(180deg); }
+}
+
+@keyframes enhancement-particle {
+  0% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--particle-angle)) translateY(0); }
+  30% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--particle-angle)) translateY(-80px); }
+}
+
+@keyframes enhancement-burst {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(2); }
+}
+
+@keyframes enhancement-weapon-glow {
+  0% { filter: brightness(1) drop-shadow(0 0 0px transparent); }
+  50% { filter: brightness(1.4) drop-shadow(0 0 15px rgba(250,204,21,0.6)); }
+  100% { filter: brightness(1) drop-shadow(0 0 0px transparent); }
+}
+
+@keyframes fade-in {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.animate-enhancement-pulse {
+  animation: enhancement-pulse 1.2s ease-in-out infinite;
+}
+
+.animate-enhancement-ring {
+  animation: enhancement-ring 1.5s ease-out infinite;
+}
+
+.animate-enhancement-particle {
+  animation: enhancement-particle 1.8s ease-out infinite;
+}
+
+.animate-enhancement-burst {
+  animation: enhancement-burst 0.6s ease-out forwards;
+}
+
+.animate-enhancement-weapon-glow {
+  animation: enhancement-weapon-glow 1.2s ease-in-out infinite;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out forwards;
+}
+
+@keyframes premium-badge-glow {
+  0% { box-shadow: 0 0 8px rgba(251, 191, 36, 0.3), inset 0 0 4px rgba(251, 191, 36, 0.1); }
+  100% { box-shadow: 0 0 16px rgba(251, 191, 36, 0.5), inset 0 0 8px rgba(251, 191, 36, 0.2); }
+}
