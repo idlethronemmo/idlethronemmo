@@ -34,7 +34,7 @@ export default function LandingPage() {
   const lang = useMemo(() => getStoredLanguage(), []);
 
   const handleLogin = () => {
-    window.location.href = "/api/login";
+    window.location.href = "/";
   };
 
   return (

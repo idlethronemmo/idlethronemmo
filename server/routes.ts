@@ -3,7 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertPlayerSchema, updatePlayerSchema, insertMarketListingSchema, insertGuildSchema, GUILD_CREATION_COST, GUILD_UPGRADES, calculateGuildContribution, calculateFinalMaxHit, calculateFinalMinHit, applyDamageReduction, calculateAccuracyRating, calculateEvasionRating, calculateHitChance, COMBAT_HP_SCALE, COMBAT_STYLE_MODIFIERS, PLAYER_ATTACK_SPEED, RESPAWN_DELAY, ActiveCombat, Equipment, calculateGuildBonuses, type GuildBonuses, getUpgradeWoodCosts, GUILD_BANK_CONTRIBUTION, getItemResourceCategory, canAffordUpgrade, deductUpgradeCosts, getUpgradeResourceCosts, type GuildBankResources, EMPTY_GUILD_BANK, MAX_INVENTORY_SLOTS, calculateMinHit, calculateMaxHit, DEFENCE_DR_CONSTANT, type QueueItem, MARKET_LISTING_FEE, MARKET_BUY_TAX } from "@shared/schema";
 import { fromZodError } from "zod-validation-error";
-import { setupAuth } from "./replitAuth";
+import { setupAuth } from "./auth";
 import { z } from "zod";
 import { isItemTradable, isEquipmentItem } from "./itemUtils";
 import { normalizeItemId, extractBaseItemId, canonicalizeItemId } from "@shared/itemData";
@@ -243,33 +243,19 @@ function toPublicProfile(player: any) {
 
 interface AuthenticatedPlayerRequest extends Request {
   player?: any;
-  authMethod?: 'replit' | 'firebase' | 'session';
+  authMethod?: "firebase" | "session";
 }
 
 // Standard auth middleware for PATCH - includes sessionToken fallback for dev mode
 async function authenticatePlayer(req: AuthenticatedPlayerRequest, res: Response, next: NextFunction) {
   try {
     // Debug log to see what auth headers we're receiving
-    console.log('[authenticatePlayer] Headers:', {
-      authorization: req.headers.authorization ? 'Bearer ...' : 'none',
-      'x-session-token': req.headers['x-session-token'] ? 'present' : 'none',
-      isAuthenticated: (req as any).isAuthenticated?.() ? 'yes' : 'no'
+    console.log("[authenticatePlayer] Headers:", {
+      authorization: req.headers.authorization ? "Bearer ..." : "none",
+      "x-session-token": req.headers["x-session-token"] ? "present" : "none",
     });
-    
-    // First try Replit session auth
-    if ((req as any).isAuthenticated && (req as any).isAuthenticated()) {
-      const userId = (req as any).user?.claims?.sub;
-      if (userId) {
-        const player = await storage.getPlayerByUserId(userId);
-        if (player) {
-          req.player = player;
-          req.authMethod = 'replit';
-          return next();
-        }
-      }
-    }
-    
-    // Then try Firebase token auth
+
+    // Firebase Bearer token
     const authHeader = req.headers.authorization;
     if (authHeader && authHeader.startsWith('Bearer ')) {
       const idToken = authHeader.split('Bearer ')[1];
@@ -340,19 +326,6 @@ async function authenticatePlayer(req: AuthenticatedPlayerRequest, res: Response
 // Auth middleware for sendBeacon POST - includes sessionToken fallback with rotation
 async function authenticatePlayerForBeacon(req: AuthenticatedPlayerRequest, res: Response, next: NextFunction) {
   try {
-    // First try standard auth methods
-    if ((req as any).isAuthenticated && (req as any).isAuthenticated()) {
-      const userId = (req as any).user?.claims?.sub;
-      if (userId) {
-        const player = await storage.getPlayerByUserId(userId);
-        if (player) {
-          req.player = player;
-          req.authMethod = 'replit';
-          return next();
-        }
-      }
-    }
-    
     const authHeader = req.headers.authorization;
     if (authHeader && authHeader.startsWith('Bearer ')) {
       const idToken = authHeader.split('Bearer ')[1];
@@ -513,7 +486,7 @@ const onPlayerConnectTracker = new Map<string, number>();
 const ON_PLAYER_CONNECT_COOLDOWN = 60000;
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Setup Replit Auth
+  // express-session (PostgreSQL) + legacy /api/login → /
   if (process.env.DISABLE_AUTH !== "true") {
     await setupAuth(app);
   } else {
@@ -1688,7 +1661,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Check if session is still valid (called periodically by frontend)
-  // Supports both Replit Auth users and guest users via x-session-token header
+  // Supports Firebase users and guests via x-session-token header
   app.get("/api/players/check-session", async (req: any, res) => {
     try {
       const guestSessionToken = req.headers['x-session-token'] as string;
@@ -1775,20 +1748,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // Force logout - clears session and redirects to login
+  // Logout: clear task + session cookie, redirect home
   app.get("/api/logout", async (req: any, res) => {
     try {
-      const sessionToken = req.headers['x-session-token'] as string;
+      let player: any;
+      const sessionToken = req.headers["x-session-token"] as string;
       if (sessionToken) {
-        const player = await storage.getPlayerBySessionToken(sessionToken);
-        if (player) {
-          await storage.updatePlayer(player.id, { lastLogoutAt: new Date(), isOnline: 0 });
+        player = await storage.getPlayerBySessionToken(sessionToken);
+      }
+      if (!player) {
+        const authHeader = req.headers.authorization;
+        if (authHeader?.startsWith("Bearer ")) {
+          const decoded = await verifyFirebaseToken(authHeader.slice(7));
+          if (decoded) {
+            const uid = getFirebaseUidFromToken(decoded);
+            player = await storage.getPlayerByFirebaseUid(uid);
+          }
         }
       }
-    } catch (e) {}
-    req.logout?.(() => {});
-    req.session?.destroy(() => {});
-    res.redirect("/");
+      if (player) {
+        await storage.updatePlayer(player.id, {
+          activeTask: null,
+          lastLogoutAt: new Date(),
+          isOnline: 0,
+        });
+      }
+    } catch (e) {
+      console.error("[LOGOUT]", e);
+    }
+    if (req.session) {
+      req.session.destroy((err: Error | null) => {
+        if (err) console.error("[LOGOUT] session destroy:", err);
+        res.redirect("/");
+      });
+    } else {
+      res.redirect("/");
+    }
   });
   
   // DEBUG: Test offline progress calculation for a specific player (REMOVE IN PRODUCTION)
@@ -3153,7 +3148,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Update player data (save game state) - supports both Replit and Firebase auth
+  // Update player data (save game state) - Firebase Bearer + session token
   // SINGLE SESSION: Validates session token to ensure only active session can save
   app.patch("/api/players/:id", authenticatePlayer, validateSessionToken, async (req: AuthenticatedPlayerRequest, res) => {
     try {

@@ -46,7 +46,7 @@ const dungeonV2ConfigSchema = z.object({
 
 interface AuthenticatedPlayerRequest extends Request {
   player?: any;
-  authMethod?: 'replit' | 'firebase' | 'session';
+  authMethod?: "firebase" | "session";
 }
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();

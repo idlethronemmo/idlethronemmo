@@ -159,22 +159,7 @@ export default function OnboardingPage({ onComplete, onBack, onboardingData }: O
           throw new Error(data.message || "Failed to create character");
         }
       } else {
-        // Fallback to old Replit Auth endpoint
-        const response = await fetch("/api/players", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: 'include',
-          body: JSON.stringify({
-            username,
-            avatar: selectedAvatar.id,
-            language: selectedLanguage
-          })
-        });
-
-        if (!response.ok) {
-          const data = await response.json();
-          throw new Error(data.error || "Failed to create character");
-        }
+        throw new Error(t("sessionNotFound"));
       }
 
       onComplete();

@@ -5,7 +5,7 @@ import { eq, desc, and, ne, gte, lt, lte, sql, inArray, ilike, isNotNull } from 
 import { isItemTradable, isEquipmentItem } from "@shared/itemData";
 
 export interface IStorage {
-  // User operations for Replit Auth
+  // User table operations
   getUser(id: string): Promise<User | undefined>;
   upsertUser(user: UpsertUser): Promise<User>;
   // Player operations
@@ -259,7 +259,7 @@ export interface IStorage {
 }
 
 export class DatabaseStorage implements IStorage {
-  // User operations for Replit Auth
+  // User table operations
   async getUser(id: string): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
     return user;
