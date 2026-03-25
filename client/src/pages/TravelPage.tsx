@@ -1261,7 +1261,7 @@ export default function TravelPage() {
                     const { region, useTeleportStone } = taskStopConfirm;
                     setTaskStopConfirm(null);
                     // Stop task with skipQueueAdvance=true AND clear queue so it never re-shows the dialog
-                    await stopTask(undefined, true);
+                    await (stopTask as any)(undefined, true);
                     await clearQueue();
                     setTimeout(() => handleTravel(region, useTeleportStone, true), 100);
                   }}

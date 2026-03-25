@@ -118,6 +118,10 @@ export interface MemberFloorInput {
   currentHp: number;
   attackSpeed: number;
   weaponType: string | null;
+  minHit?: number;
+  maxHit?: number;
+  critChance?: number;
+  critDamage?: number;
 }
 
 export interface DungeonLootTableInput {
@@ -667,7 +671,7 @@ export function resolveFloor(input: FloorResolutionInput): FloorResolutionResult
   if (reflectPercent > 0 || flatReflectPerHit > 0) {
     for (const result of memberResults) {
       if (result.isAlive) {
-        const member = members.find(m => m.playerId === result.playerId);
+        const member = input.members.find((m: any) => m.playerId === result.playerId);
         const rawReflected = Math.floor(result.damageDealt * reflectPercent) + Math.floor(flatReflectPerHit);
         const reflectCap = member ? Math.floor(member.maxHp * 0.12) : rawReflected;
         const reflected = Math.min(rawReflected, reflectCap);

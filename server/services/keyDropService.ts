@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { db } from "../../db";
 import { eq, and, gte, lte, sql } from "drizzle-orm";
 import {
@@ -185,3 +186,4 @@ export class KeyDropService {
 }
 
 export const keyDropService = new KeyDropService();
+

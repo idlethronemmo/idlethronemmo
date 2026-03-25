@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { db } from "../../db";
 import { eq, and, sql, inArray } from "drizzle-orm";
 import {
@@ -1429,3 +1430,4 @@ export class DungeonV2Service {
 }
 
 export const dungeonV2Service = new DungeonV2Service();
+

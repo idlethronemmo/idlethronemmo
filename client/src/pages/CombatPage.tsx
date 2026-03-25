@@ -1093,7 +1093,7 @@ export default function CombatPage() {
             return {
               ...old,
               members: old.members.map((m: any) => {
-                const fresh = statusMap.get(m.playerId);
+                const fresh = statusMap.get(m.playerId) as any;
                 if (!fresh) return m;
                 return { ...m, currentMonsterId: fresh.currentMonsterId, isInCombat: fresh.isInCombat, currentRegion: fresh.currentRegion };
               })
@@ -6233,7 +6233,7 @@ export default function CombatPage() {
                             {loot.chance < 1 ? `${loot.chance}%` : `${Math.round(loot.chance)}%`}
                           </div>
                           <div className="text-xs text-muted-foreground">
-                            {loot.minQty === loot.maxQty ? `${loot.minQty} ${t(language, 'quantity')}` : `${loot.minQty}-${loot.maxQty} ${t(language, 'quantity')}`}
+                            {loot.minQty === loot.maxQty ? `${loot.minQty} ${(t as any)(language, 'quantity')}` : `${loot.minQty}-${loot.maxQty} ${(t as any)(language, 'quantity')}`}
                           </div>
                         </div>
                       </div>
@@ -6285,17 +6285,19 @@ export default function CombatPage() {
         }
       }}>
         <AlertDialogContent
-          className="border-amber-500/50 bg-gradient-to-b from-amber-950/20 to-card"
-          onPointerDownOutside={() => {
-            setAutoEatWarningOpen(false);
-            setAutoEatWarningMonsterId(null);
-            pendingAutoEatActionRef.current = null;
-          }}
-          onEscapeKeyDown={() => {
-            setAutoEatWarningOpen(false);
-            setAutoEatWarningMonsterId(null);
-            pendingAutoEatActionRef.current = null;
-          }}
+          {...{
+            className: "border-amber-500/50 bg-gradient-to-b from-amber-950/20 to-card",
+            onPointerDownOutside: () => {
+              setAutoEatWarningOpen(false);
+              setAutoEatWarningMonsterId(null);
+              pendingAutoEatActionRef.current = null;
+            },
+            onEscapeKeyDown: () => {
+              setAutoEatWarningOpen(false);
+              setAutoEatWarningMonsterId(null);
+              pendingAutoEatActionRef.current = null;
+            },
+          } as any}
         >
           <AlertDialogHeader>
             <AlertDialogTitle className="text-amber-400 flex items-center gap-2">

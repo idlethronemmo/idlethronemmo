@@ -99,6 +99,7 @@ export function createCombatStateFromAdapter(input: ShadowAdapterInput): CombatS
     partyDpsBuff: input.equipPartyDpsBuff,
     partyDefenceBuff: input.equipPartyDefenceBuff,
     partyAttackSpeedBuff: input.equipPartyAttackSpeedBuff,
+    lootChanceBonus: (input as any).equipLootChanceBonus ?? 0,
   };
 
   const buffs: BuffSnapshot = {

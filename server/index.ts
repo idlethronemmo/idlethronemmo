@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express, { type Request, Response, NextFunction } from "express";
 import compression from "compression";
 import path from "path";
@@ -9,6 +10,7 @@ import { storage } from "./storage";
 import { db } from "../db";
 import { sql } from "drizzle-orm";
 
+console.log("ENV CHECK:", process.env.FIREBASE_CLIENT_EMAIL);
 // One-time migration: move dungeon keys from players.inventory to player_dungeon_keys table
 async function migrateDungeonKeysToTable() {
   try {
@@ -708,21 +710,15 @@ app.use((req, res, next) => {
   }
 
   const port = parseInt(process.env.PORT || "5000", 10);
-  httpServer.listen(
-    {
-      port,
-      host: "0.0.0.0",
-      reusePort: true,
-    },
-    () => {
-      log(`serving on port ${port}`);
 
-      runStartupTasks().catch(err => {
-        console.error('[Startup] Error in startup tasks:', err);
-      });
-    },
-  );
+  app.listen(port, () => {
+    log(`serving on port ${port}`);
   
+    runStartupTasks().catch(err => {
+      console.error("[Startup] Error in startup tasks:", err);
+    });
+  });
+    
   process.on('SIGTERM', () => {
     log('SIGTERM received, stopping scheduler...');
     stopScheduler();

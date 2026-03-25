@@ -387,7 +387,7 @@ export function registerDungeonV2Routes(app: Express, authenticatePlayer: any, a
       const [chatSession] = await db.select({ partyId: dungeonSessions.partyId })
         .from(dungeonSessions).where(eq(dungeonSessions.id, sessionId)).limit(1);
       if (chatSession?.partyId) {
-        const { broadcastToParty, createPartyEvent } = await import('../partyWs');
+        const { broadcastToParty, createPartyEvent } = await import('./partyWs');
         broadcastToParty(chatSession.partyId, createPartyEvent('dungeon_chat_message', chatSession.partyId, 0, {
           sessionId, playerId: player.id, playerName: player.username, content,
         }));
@@ -576,7 +576,7 @@ export function registerDungeonV2Routes(app: Express, authenticatePlayer: any, a
       if (!parsed.success) {
         return res.status(400).json({ error: 'Invalid config', details: parsed.error.flatten() });
       }
-      const [newConfig] = await db.insert(dungeonV2Config).values(parsed.data).returning();
+      const [newConfig] = await db.insert(dungeonV2Config).values(parsed.data as any).returning();
       res.json(newConfig);
     } catch (err: any) {
       res.status(500).json({ error: err.message || 'Failed to create dungeon v2 config' });
@@ -589,7 +589,7 @@ export function registerDungeonV2Routes(app: Express, authenticatePlayer: any, a
       if (!parsed.success) {
         return res.status(400).json({ error: 'Invalid config', details: parsed.error.flatten() });
       }
-      const [updated] = await db.update(dungeonV2Config).set(parsed.data).where(eq(dungeonV2Config.id, req.params.id)).returning();
+      const [updated] = await db.update(dungeonV2Config).set(parsed.data as any).where(eq(dungeonV2Config.id, req.params.id)).returning();
       if (!updated) return res.status(404).json({ error: 'Config not found' });
       res.json(updated);
     } catch (err: any) {
@@ -612,7 +612,7 @@ export function registerDungeonV2Routes(app: Express, authenticatePlayer: any, a
       const cutoff = new Date(Date.now() - hoursThreshold * 60 * 60 * 1000);
 
       const result = await db.update(dungeonSessions)
-        .set({ status: 'failed', endedAt: new Date() })
+        .set({ status: 'failed', endedAt: new Date() } as any)
         .where(and(
           sql`${dungeonSessions.status} IN ('active', 'voting')`,
           sql`${dungeonSessions.startedAt} < ${cutoff}`,
@@ -620,7 +620,7 @@ export function registerDungeonV2Routes(app: Express, authenticatePlayer: any, a
         .returning({ id: dungeonSessions.id });
 
       const partyResult = await db.update(parties)
-        .set({ status: 'forming', updatedAt: new Date() })
+        .set({ status: 'forming', updatedAt: new Date() } as any)
         .where(and(
           sql`${parties.status} IN ('locked', 'in_dungeon')`,
           sql`${parties.updatedAt} < ${cutoff}`,
@@ -679,13 +679,13 @@ export function registerDungeonV2Routes(app: Express, authenticatePlayer: any, a
       }
 
       await db.update(dungeonSessions)
-        .set({ status: 'failed', endedAt: new Date() })
+        .set({ status: 'failed', endedAt: new Date() } as any)
         .where(eq(dungeonSessions.id, sessionId));
 
       let partyReset = false;
       if (session.partyId) {
         await db.update(parties)
-          .set({ status: 'forming', updatedAt: new Date() })
+          .set({ status: 'forming', updatedAt: new Date() } as any)
           .where(eq(parties.id, session.partyId));
         partyReset = true;
       }
@@ -713,7 +713,7 @@ export function registerDungeonV2Routes(app: Express, authenticatePlayer: any, a
       }
 
       const closedSessions = await db.update(dungeonSessions)
-        .set({ status: 'failed', endedAt: new Date() })
+        .set({ status: 'failed', endedAt: new Date() } as any)
         .where(and(
           eq(dungeonSessions.playerId, player.id),
           sql`${dungeonSessions.status} IN ('active', 'voting')`,
@@ -727,7 +727,7 @@ export function registerDungeonV2Routes(app: Express, authenticatePlayer: any, a
       let resetParties = 0;
       if (partyIds.length > 0) {
         const partyResult = await db.update(parties)
-          .set({ status: 'forming', updatedAt: new Date() })
+          .set({ status: 'forming', updatedAt: new Date() } as any)
           .where(inArray(parties.id, partyIds))
           .returning({ id: parties.id });
         resetParties = partyResult.length;
@@ -957,7 +957,7 @@ export function registerDungeonV2Routes(app: Express, authenticatePlayer: any, a
 
       const party = result.party!;
       if (dungeonId) {
-        await db.update(parties).set({ dungeonId }).where(eq(parties.id, party.id));
+        await db.update(parties).set({ dungeonId } as any).where(eq(parties.id, party.id));
       }
 
       const fullParty = await partyService.getParty(party.id);
@@ -1081,7 +1081,7 @@ export function registerDungeonV2Routes(app: Express, authenticatePlayer: any, a
           .where(and(eq(partyInvites.partyId, party.id), eq(partyInvites.status, 'pending')));
         const { sendToPlayer } = await import('./partyWs');
         for (const inv of pendingInvites) {
-          await db.update(partyInvites).set({ status: 'cancelled', updatedAt: new Date() }).where(eq(partyInvites.id, inv.id));
+          await db.update(partyInvites).set({ status: 'cancelled', updatedAt: new Date() } as any).where(eq(partyInvites.id, inv.id));
           sendToPlayer(inv.inviteeId, createPartyEvent('party_invite_cancelled', party.id, 0, { inviteId: inv.id, reason: 'party_full' }));
         }
       }
@@ -1124,7 +1124,7 @@ export function registerDungeonV2Routes(app: Express, authenticatePlayer: any, a
         return res.status(403).json({ error: 'Not authorized to cancel', errorCode: 'NOT_AUTHORIZED' });
       }
 
-      await db.update(partyInvites).set({ status: 'cancelled', updatedAt: new Date() }).where(eq(partyInvites.id, inviteId));
+      await db.update(partyInvites).set({ status: 'cancelled', updatedAt: new Date() } as any).where(eq(partyInvites.id, inviteId));
 
       const { broadcastToParty, sendToPlayer, createPartyEvent } = await import('./partyWs');
       sendToPlayer(invite.inviteeId, createPartyEvent('party_invite_cancelled', invite.partyId, 0, { inviteId, reason: 'cancelled' }));
@@ -1148,7 +1148,7 @@ export function registerDungeonV2Routes(app: Express, authenticatePlayer: any, a
       if (!membership) return res.status(400).json({ error: 'Not a member of this party' });
 
       const readyVal = isReady ? 1 : 0;
-      await db.update(partyMembers).set({ isReady: readyVal }).where(eq(partyMembers.id, membership.id));
+      await db.update(partyMembers).set({ isReady: readyVal } as any).where(eq(partyMembers.id, membership.id));
 
       const { broadcastToParty, createPartyEvent } = await import('./partyWs');
       broadcastToParty(partyId, createPartyEvent('party_ready_updated', partyId, 0, { playerId: player.id, isReady: readyVal }));
@@ -1304,7 +1304,7 @@ export function registerDungeonV2Routes(app: Express, authenticatePlayer: any, a
       if (!party) return res.status(404).json({ error: 'Party not found' });
       if (party.leaderId !== player.id && targetPlayerId !== player.id) return res.status(403).json({ error: 'Not authorized', errorCode: 'NOT_AUTHORIZED' });
 
-      await db.update(partyMembers).set({ role }).where(eq(partyMembers.id, membership.id));
+      await db.update(partyMembers).set({ role } as any).where(eq(partyMembers.id, membership.id));
 
       const { broadcastToParty, createPartyEvent } = await import('./partyWs');
       broadcastToParty(partyId, createPartyEvent('party_role_changed', partyId, 0, { playerId: targetPlayerId, role }));

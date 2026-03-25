@@ -717,7 +717,7 @@ export default function InventoryPage() {
             <EquipmentPanel
               equipment={equipment}
               inventory={inventory}
-              equipItem={handleSwapEquipment}
+              equipItem={handleSwapEquipment as any}
               unequipItem={handleUnequipFromPopover}
               bonuses={bonuses}
               getSlotDurability={getSlotDurability}
@@ -1587,7 +1587,7 @@ export default function InventoryPage() {
           <EquipmentPanel
             equipment={equipment}
             inventory={inventory}
-            equipItem={handleSwapEquipment}
+            equipItem={handleSwapEquipment as any}
             unequipItem={handleUnequipFromPopover}
             bonuses={bonuses}
             getSlotDurability={getSlotDurability}

@@ -24,7 +24,7 @@ export default function GuildInvitePopup() {
     
     pendingInvites.forEach(invite => {
       if (!prevIds.has(invite.id)) {
-        addNotification("guild_invite", t('receivedGuildInvite').replace('{0}', invite.guildName), {
+        addNotification("guild_invite", t('receivedGuildInvite').replace('{0}', invite.guildName || ''), {
           inviteId: invite.id,
           guildName: invite.guildName,
           inviterName: invite.inviterName
@@ -111,7 +111,7 @@ export default function GuildInvitePopup() {
                 <p className="font-semibold text-foreground truncate">{invite.guildName}</p>
                 <p className="text-xs text-muted-foreground flex items-center gap-1">
                   <Crown className="w-3 h-3" weight="fill" />
-                  {t('invitedByPlayer').replace('{0}', invite.inviterName)}
+                  {t('invitedByPlayer').replace('{0}', invite.inviterName || '')}
                 </p>
                 {invite.guildLevel && (
                   <p className="text-xs text-muted-foreground flex items-center gap-1">

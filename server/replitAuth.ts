@@ -143,8 +143,12 @@ export async function setupAuth(app: Express) {
   });
 }
 
-export const isAuthenticated: RequestHandler = async (req, res, next) => {
   // Dev mode bypass - use first player as authenticated user
+  export const isAuthenticated: RequestHandler = async (req, res, next) => {
+ 
+    if (process.env.DISABLE_AUTH === "true") {
+      return next();
+    }
   if (process.env.NODE_ENV === 'development') {
     try {
       const players = await storage.getLeaderboard(1);

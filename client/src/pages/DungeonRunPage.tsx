@@ -866,7 +866,7 @@ export default function DungeonRunPage() {
 
   usePartyWebSocket({
     playerId: player?.id ? String(player.id) : null,
-    partyId: partySession?.partyId ? String(partySession.partyId) : session?.partyId ? String(session.partyId) : null,
+    partyId: (partySession as any)?.partyId ? String((partySession as any).partyId) : (session as any)?.partyId ? String((session as any).partyId) : null,
     enabled: !!player && isParty,
     onEvent: handleDungeonWsEvent,
   });

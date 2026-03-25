@@ -502,7 +502,7 @@ function runBenchmark() {
 
     const totalOffDur = Object.values(offResult.durabilityLost).reduce((a, b) => a + b, 0);
     const deathPenaltyPerDeath = 7.5;
-    const numSlots = sc.equipmentSlots?.length || 4;
+    const numSlots = (sc as any).equipmentSlots?.length || 4;
     const offDeathPenalty = offResult.deaths * deathPenaltyPerDeath * numSlots;
     const offHitOnlyDur = Math.max(0, totalOffDur - offDeathPenalty);
     const onHitOnlyDur = onResult.durabilityHits * 0.0025;

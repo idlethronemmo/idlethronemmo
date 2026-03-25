@@ -185,7 +185,7 @@ export default function PartyPage() {
     },
     refetchInterval: 30000,
     staleTime: 15000,
-    enabled: !isGuest && (!currentParty || (isPartyLeader && (currentParty.members || []).length < currentParty.maxSize)),
+    enabled: !!(!isGuest && (!currentParty || (isPartyLeader && (currentParty.members || []).length < currentParty.maxSize))),
   });
 
   const { data: publicParties = [], isLoading: isLoadingPublicParties } = useQuery<PublicPartyData[]>({
@@ -489,14 +489,14 @@ export default function PartyPage() {
               <div className="text-center py-4 text-muted-foreground text-sm">
                 {t(language, 'loading')}
               </div>
-            ) : nearbyPlayers.length === 0 ? (
+            ) : (nearbyPlayers as any[]).length === 0 ? (
               <div className="text-center py-4 text-muted-foreground text-sm">
                 {t(language, 'nearbyPlayersEmpty')}
               </div>
             ) : (
               <ScrollArea className="max-h-[250px]">
                 <div className="space-y-2">
-                  {nearbyPlayers.map((np) => {
+                  {(nearbyPlayers as any[]).map((np) => {
                     const avatarSrc = np.avatar ? AVATAR_MAP[np.avatar] : AVATAR_MAP['warrior'];
                     return (
                       <div 
@@ -849,12 +849,12 @@ export default function PartyPage() {
           <CardContent>
             {isLoadingNearby ? (
               <div className="text-center py-3 text-muted-foreground text-xs">{t(language, 'loading')}</div>
-            ) : nearbyPlayers.length === 0 ? (
+            ) : (nearbyPlayers as any[]).length === 0 ? (
               <div className="text-center py-3 text-muted-foreground text-xs">{t(language, 'nearbyPlayersEmpty')}</div>
             ) : (
               <ScrollArea className="max-h-[200px]">
                 <div className="space-y-1.5">
-                  {nearbyPlayers.filter(np => !(currentParty.members || []).some((m: any) => m.playerId === np.id)).map((np) => {
+                  {(nearbyPlayers as any[]).filter(np => !(currentParty.members || []).some((m: any) => m.playerId === np.id)).map((np) => {
                     const avatarSrc = np.avatar ? AVATAR_MAP[np.avatar] : AVATAR_MAP['warrior'];
                     return (
                       <div
@@ -893,7 +893,7 @@ export default function PartyPage() {
                           data-testid={`invite-nearby-inparty-${np.id}`}
                         >
                           <PaperPlaneTilt className="w-3 h-3 mr-0.5" />
-                          {t(language, 'partyInvite')}
+                          {(t as any)(language, 'partyInvite')}
                         </Button>
                       </div>
                     );

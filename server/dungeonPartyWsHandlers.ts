@@ -87,7 +87,7 @@ async function handleCreate(ws: WebSocket, playerId: string, msg: any) {
 
   if (dungeonId) {
     await db.update(parties)
-      .set({ dungeonId })
+      .set({ dungeonId } as any)
       .where(eq(parties.id, party.id));
   }
 
@@ -229,7 +229,7 @@ async function handleInviteAccept(ws: WebSocket, playerId: string, msg: any) {
     if (pendingInvites.length > 0) {
       for (const inv of pendingInvites) {
         await db.update(partyInvites)
-          .set({ status: 'cancelled', updatedAt: new Date() })
+          .set({ status: 'cancelled', updatedAt: new Date() } as any)
           .where(eq(partyInvites.id, inv.id));
         sendToPlayer(inv.inviteeId, createPartyEvent('party_invite_cancelled', party.id, 0, {
           inviteId: inv.id,
@@ -302,7 +302,7 @@ async function handleInviteCancel(ws: WebSocket, playerId: string, msg: any) {
   }
 
   await db.update(partyInvites)
-    .set({ status: 'cancelled', updatedAt: new Date() })
+    .set({ status: 'cancelled', updatedAt: new Date() } as any)
     .where(eq(partyInvites.id, inviteId));
 
   sendToPlayer(invite.inviteeId, createPartyEvent('party_invite_cancelled', invite.partyId, 0, {
@@ -338,7 +338,7 @@ async function handleReadySet(ws: WebSocket, playerId: string, msg: any) {
 
   const readyVal = isReady ? 1 : 0;
   await db.update(partyMembers)
-    .set({ isReady: readyVal })
+    .set({ isReady: readyVal } as any)
     .where(eq(partyMembers.id, membership.id));
 
   broadcastToParty(partyId, createPartyEvent('party_ready_updated', partyId, 0, {
@@ -491,7 +491,7 @@ async function handleRoleChange(ws: WebSocket, playerId: string, msg: any) {
   }
 
   await db.update(partyMembers)
-    .set({ role })
+    .set({ role } as any)
     .where(eq(partyMembers.id, membership.id));
 
   broadcastToParty(partyId, createPartyEvent('party_role_changed', partyId, 0, {

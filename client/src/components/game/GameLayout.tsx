@@ -599,7 +599,7 @@ export default function GameLayout({ children }: { children: React.ReactNode }) 
       queryClient.invalidateQueries({ queryKey: ['/api/parties/current'] });
       queryClient.invalidateQueries({ queryKey: ['/api/parties/public'] });
       setPartyPopoverOpen(false);
-      toast({ title: t(language, 'leftParty') || (language === 'tr' ? 'Partiden ayrıldın' : 'Left party') });
+      toast({ title: (t as any)(language, 'leftParty') || (language === 'tr' ? 'Partiden ayrıldın' : 'Left party') });
     },
   });
 

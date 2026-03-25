@@ -1,0 +1,1 @@
+export const ASSET_BASE = "https://pub-87034a8f89f94b3d9149a9af7048ee14.r2.dev/";

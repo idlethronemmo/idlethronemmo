@@ -216,7 +216,7 @@ async function cleanupStaleParties(): Promise<void> {
       for (const party of staleParties) {
         await db.delete(partyMembers).where(eq(partyMembers.partyId, party.id)).catch(() => {});
         await db.update(parties)
-          .set({ status: 'disbanded', updatedAt: new Date() })
+          .set({ status: 'disbanded', updatedAt: new Date() } as any)
           .where(eq(parties.id, party.id));
       }
       console.log(`[Scheduler] Stale party cleanup: Disbanded ${staleParties.length} inactive parties`);
@@ -240,7 +240,7 @@ async function cleanupStaleParties(): Promise<void> {
 async function cleanupExpiredInvites(): Promise<void> {
   try {
     const result = await db.update(partyInvites)
-      .set({ status: 'expired' })
+      .set({ status: 'expired' } as any)
       .where(and(
         eq(partyInvites.status, 'pending'),
         sql`${partyInvites.expiresAt} < NOW()`
@@ -890,7 +890,7 @@ async function processCombatTick(player: any, now: number): Promise<void> {
   const isV2Combat = !!(activeCombat as any).queueDurationMs;
   let combatExpiry: number | null = null;
   if (isV2Combat) {
-    const combatStart = activeCombat.combatStartTime || activeCombat.startTime || 0;
+    const combatStart = activeCombat.combatStartTime || (activeCombat as any).startTime || 0;
     combatExpiry = combatStart + ((activeCombat as any).queueDurationMs as number);
   } else if (activeCombat.limitExpiresAt) {
     combatExpiry = activeCombat.limitExpiresAt;
@@ -2208,7 +2208,7 @@ async function processTaskTick(player: any, now: number): Promise<void> {
           playerId: partyMembers.playerId,
           currentSkill: partyMembers.currentSkill,
           currentRegion: partyMembers.currentRegion,
-          lastActive: partyMembers.lastActive
+          lastActive: (partyMembers as any).lastActive
         })
         .from(partyMembers)
         .where(eq(partyMembers.partyId, partyMembership.partyId));

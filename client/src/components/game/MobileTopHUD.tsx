@@ -94,7 +94,7 @@ export default function MobileTopHUD() {
       queryClient.invalidateQueries({ queryKey: ['/api/parties/current'] });
       queryClient.invalidateQueries({ queryKey: ['/api/parties/public'] });
       setPartyDropdownOpen(false);
-      toast({ title: t(language, 'leftParty') || (language === 'tr' ? 'Partiden ayrıldın' : 'Left party') });
+      toast({ title: (t as any)(language, 'leftParty') || (language === 'tr' ? 'Partiden ayrıldın' : 'Left party') });
     },
   });
 

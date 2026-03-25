@@ -1723,8 +1723,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
             hp = hp * COMBAT_HP_SCALE;
           }
           // Include equipment bonus in max HP calculation
-          const equipData = data.equipment as Record<EquipmentSlot, string | null> || {};
-          const hpBonus = getTotalEquipmentBonus(equipData, itemModificationsRef.current).hitpointsBonus || 0;
+          const equipData = (data.equipment as any) || {};
+          const hpBonus = getTotalEquipmentBonus(equipData as any, itemModificationsRef.current).hitpointsBonus || 0;
           const maxHpWithBonus = (hpLevel * COMBAT_HP_SCALE) + hpBonus;
           setCurrentHitpoints(Math.min(maxHpWithBonus, Math.max(0, hp)));
           currentHitpointsRef.current = Math.min(maxHpWithBonus, Math.max(0, hp));
@@ -4353,7 +4353,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     const baseItem = getBaseItem(itemId);
     let pricePerItem = basePrice;
     
-    if (baseItem?.type === "equipment" || baseItem?.type === "weapon") {
+    if (baseItem?.type === "equipment" || (baseItem?.type as any) === "weapon") {
       const durability = inventoryDurabilityRef.current[itemId] ?? MAX_DURABILITY;
       pricePerItem = Math.floor(basePrice * (durability / 100));
     }
@@ -5230,7 +5230,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
           case "loot_drop": {
             if (event.itemId && event.quantity) {
               const item = getItemById(event.itemId);
-              const isEquipment = item && (item.type === "equipment" || item.type === "weapon");
+              const isEquipment = item && (item.type === "equipment" || (item.type as any) === "weapon");
               let finalItemId = event.itemId;
               let displayRarity: string | null = null;
 
@@ -6823,7 +6823,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
           }
           
           // Roll rarity for equipment before inventory update
-          const isEquipment = item && (item.type === "equipment" || item.type === "weapon");
+          const isEquipment = item && (item.type === "equipment" || (item.type as any) === "weapon");
           const rarity = isEquipment ? rollRarity() : null;
           const craftedItemKey = isEquipment ? `${activeTask.name} (${rarity})` : activeTask.name;
           
@@ -7321,8 +7321,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
             // HP is stored scaled (e.g., level 21 with COMBAT_HP_SCALE=10 means max=210)
             // Also include equipment HP bonus
             const hpLevel = (data.skills as Record<string, SkillState>).hitpoints?.level || 10;
-            const equipmentData = data.equipment as Record<EquipmentSlot, string | null> || {};
-            const hpBonus = getTotalEquipmentBonus(equipmentData, itemModificationsRef.current).hitpointsBonus || 0;
+            const equipmentData = (data.equipment as any) || {};
+            const hpBonus = getTotalEquipmentBonus(equipmentData as any, itemModificationsRef.current).hitpointsBonus || 0;
             const maxHp = (hpLevel * COMBAT_HP_SCALE) + hpBonus;
             // Clamp to valid range (0 to maxHp) - preserve saved HP, don't reset to full
             setCurrentHitpoints(Math.min(maxHp, Math.max(0, data.currentHitpoints)));

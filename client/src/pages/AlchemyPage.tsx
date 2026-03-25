@@ -256,6 +256,7 @@ function formatPotionEffect(effect: PotionEffect, duration: number | undefined, 
     damage_reduction: "damageReductionEffect",
     xp_boost: "xpBoostEffect",
     maxHpBoost: "maxHp",
+    lifesteal: "lifesteal",
   };
 
   const effectName = t(language, effectTypeToKey[effect.type] as any) || effect.type;

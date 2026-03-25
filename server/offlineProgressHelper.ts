@@ -128,7 +128,7 @@ export interface OfflineAchievementCompletion {
 
 export interface QueueStepResult {
   name: string;
-  type: 'skill' | 'combat';
+  type: 'skill' | 'combat' | 'study';
   durationMs: number;
   xpEarned?: number;
   itemsEarned?: number;

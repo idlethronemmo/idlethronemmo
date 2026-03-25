@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Timer, Skull, Sword, PlayCircle, PauseCircle } from "lucide-react";
-import heroBg from "@assets/generated_images/dark_fantasy_atmospheric_background.webp";
+const heroBg = "https://pub-87034a8f89f94b3d9149a9af7048ee14.r2.dev/generated_images/dark_fantasy_atmospheric_background.webp";
 import { useGame } from "@/context/GameContext";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
@@ -103,7 +103,7 @@ export default function ActiveTask() {
         <div className="mt-8 flex gap-3">
           <Button 
             size="lg" 
-            onClick={stopTask}
+            onClick={() => stopTask()}
             className="bg-destructive hover:bg-destructive/90 text-white font-display font-bold shadow-[0_0_20px_rgba(239,68,68,0.2)]"
           >
             <PauseCircle className="mr-2 h-5 w-5" /> Stop Action

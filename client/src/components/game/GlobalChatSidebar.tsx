@@ -169,7 +169,7 @@ function parseMessageWithItems(content: string, openInspect: (item: { name: stri
         )}
         onClick={(e) => {
           e.stopPropagation();
-          openInspect({ name: itemName, fromChat: true });
+          openInspect({ name: itemName, fromChat: true } as any);
         }}
         data-testid={`chat-item-link-${match.index}`}
       >

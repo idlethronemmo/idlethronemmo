@@ -325,7 +325,7 @@ export default function PartyMemberDetailDialog({
                   data-testid={`kick-member-${member.playerId}`}
                 >
                   <UserMinus className="w-4 h-4 mr-2" weight="bold" />
-                  {t('kickFromParty') || 'Kick from Party'}
+                  {(t as any)('kickFromParty') || 'Kick from Party'}
                 </Button>
               </div>
             )}

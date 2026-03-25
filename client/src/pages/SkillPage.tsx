@@ -32,10 +32,12 @@ import { useRoute } from "wouter";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import { useMobile } from "@/hooks/useMobile";
-import mineBg from "@assets/generated_images/dark_fantasy_mine_interior.webp";
-import forestBg from "@assets/generated_images/dark_fantasy_ancient_forest.webp";
-import lakeBg from "@assets/generated_images/dark_fantasy_fishing_lake.webp";
 import { ITEM_IMAGES } from "@/lib/itemImages";
+
+const _ASSET_BASE = "https://pub-87034a8f89f94b3d9149a9af7048ee14.r2.dev/";
+const mineBg = _ASSET_BASE + "generated_images/dark_fantasy_mine_interior.webp";
+const forestBg = _ASSET_BASE + "generated_images/dark_fantasy_ancient_forest.webp";
+const lakeBg = _ASSET_BASE + "generated_images/dark_fantasy_fishing_lake.webp";
 import { useGame } from "@/context/GameContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { useAudio } from "@/context/AudioContext";
@@ -789,7 +791,7 @@ function SkillAnimation({
 
 export default function SkillPage() {
   const [match, params] = useRoute("/skill/:id");
-  const skillId = params?.id || "woodcutting";
+  const skillId = (params as any)?.id || "woodcutting";
   const { skills, activeTask, startTask, stopTask, inventory, debugMode, currentRegion, activeTravel, partySynergyBonuses, activeCombat, taskQueue, maxQueueSlotsCount, isQueueV2, maxQueueTimeMsTotal, startTaskWithDuration, addToQueue, removeFromQueue } = useGame();
   const { openInspect } = useItemInspect();
   const { isMobile } = useMobile();
@@ -1347,7 +1349,7 @@ export default function SkillPage() {
                 onStop={stopTask}
               />
               <Button 
-                onClick={stopTask}
+                onClick={() => stopTask()}
                 variant="destructive" 
                 size="lg"
                 className="h-14 px-8 rounded-full shadow-lg shadow-red-500/30 text-base"
@@ -1496,7 +1498,7 @@ export default function SkillPage() {
                          />
                        ) : null}
                        <Button 
-                          onClick={stopTask}
+                          onClick={() => stopTask()}
                           variant="destructive" 
                           size="sm" 
                           className="w-full font-bold tracking-wide"

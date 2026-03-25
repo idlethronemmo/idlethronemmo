@@ -1373,7 +1373,6 @@ export type TranslationKeys = {
   noTransactions: string;
   soldTo: string;
   boughtFrom: string;
-  ago: string;
 };
 
 const translations: Record<Language, TranslationKeys> = {
@@ -2453,7 +2452,6 @@ const translations: Record<Language, TranslationKeys> = {
     noTransactions: "No transactions yet",
     soldTo: "Sold to",
     boughtFrom: "Bought from",
-    ago: "ago",
     attacksReset: "Attacks Reset",
     attacksResetDesc: "Your daily attacks have been reset to 0.",
     resetFailed: "Reset Failed",
@@ -3744,7 +3742,6 @@ const translations: Record<Language, TranslationKeys> = {
     noTransactions: "暂无交易记录",
     soldTo: "卖给",
     boughtFrom: "从...购买",
-    ago: "前",
     attacksReset: "攻击次数已重置",
     attacksResetDesc: "你的每日攻击次数已重置为0。",
     resetFailed: "重置失败",
@@ -5035,7 +5032,6 @@ const translations: Record<Language, TranslationKeys> = {
     noTransactions: "अभी कोई लेनदेन नहीं",
     soldTo: "बेचा",
     boughtFrom: "खरीदा",
-    ago: "पहले",
     attacksReset: "हमले रीसेट",
     attacksResetDesc: "आपके दैनिक हमले 0 पर रीसेट हो गए।",
     resetFailed: "रीसेट विफल",
@@ -6326,7 +6322,6 @@ const translations: Record<Language, TranslationKeys> = {
     noTransactions: "Sin transacciones aún",
     soldTo: "Vendido a",
     boughtFrom: "Comprado de",
-    ago: "hace",
     attacksReset: "Ataques Reiniciados",
     attacksResetDesc: "Tus ataques diarios se han reiniciado a 0.",
     resetFailed: "Reinicio Fallido",
@@ -7617,7 +7612,6 @@ const translations: Record<Language, TranslationKeys> = {
     noTransactions: "Aucune transaction encore",
     soldTo: "Vendu à",
     boughtFrom: "Acheté de",
-    ago: "il y a",
     attacksReset: "Attaques Réinitialisées",
     attacksResetDesc: "Vos attaques quotidiennes ont été réinitialisées à 0.",
     resetFailed: "Réinitialisation Échouée",
@@ -8908,7 +8902,6 @@ const translations: Record<Language, TranslationKeys> = {
     noTransactions: "لا توجد معاملات بعد",
     soldTo: "بيع إلى",
     boughtFrom: "اشتري من",
-    ago: "منذ",
     attacksReset: "تم إعادة تعيين الهجمات",
     attacksResetDesc: "تم إعادة تعيين هجماتك اليومية إلى 0.",
     resetFailed: "فشل إعادة التعيين",
@@ -10199,7 +10192,6 @@ const translations: Record<Language, TranslationKeys> = {
     noTransactions: "Нет сделок",
     soldTo: "Продано",
     boughtFrom: "Куплено у",
-    ago: "назад",
     attacksReset: "Атаки Сброшены",
     attacksResetDesc: "Ваши ежедневные атаки сброшены до 0.",
     resetFailed: "Сброс Провален",
@@ -11490,7 +11482,6 @@ const translations: Record<Language, TranslationKeys> = {
     noTransactions: "Henüz işlem yok",
     soldTo: "Satıldı",
     boughtFrom: "Satın alındı",
-    ago: "önce",
     attacksReset: "Saldırılar Sıfırlandı",
     attacksResetDesc: "Günlük saldırıların 0'a sıfırlandı.",
     resetFailed: "Sıfırlama Başarısız",

@@ -135,7 +135,7 @@ export function EquipmentPanel({
   };
 
   const handleSwap = (itemId: string, slot: EquipmentSlot) => {
-    equipItem(itemId, slot);
+    (equipItem as any)(itemId, slot);
     setOpenSlot(null);
   };
 

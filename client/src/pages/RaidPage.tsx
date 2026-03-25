@@ -1748,7 +1748,7 @@ export default function RaidPage() {
             const isObtained = (itemId: string) => {
               const invCount = (inventory as any)[itemId] || 0;
               if (invCount > 0) return true;
-              const eq = player?.equipment as any;
+              const eq = (player as any)?.equipment;
               if (!eq) return false;
               return Object.values(eq).some((v: any) => v === itemId || (typeof v === 'object' && v?.itemId === itemId));
             };

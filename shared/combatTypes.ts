@@ -176,7 +176,8 @@ export type CombatEventType =
   | "durability_loss"
   | "monster_regen"
   | "reflect_damage"
-  | "armor_repair";
+  | "armor_repair"
+  | "poison_immune";
 
 export interface CombatEvent {
   type: CombatEventType;
